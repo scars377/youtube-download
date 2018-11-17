@@ -21,20 +21,20 @@ class List extends Component {
   }
 
   addURLs = (urls) => {
-    this.setState(state => ({
+    this.setState((state) => ({
       urls: [...new Set([...urls, ...state.urls])],
     }));
   };
 
   removeURL = (url) => {
-    this.setState(state => ({
-      urls: state.urls.filter(u => u !== url),
+    this.setState((state) => ({
+      urls: state.urls.filter((u) => u !== url),
     }));
   };
 
   updateURL = (oldURL, url) => {
-    this.setState(state => ({
-      urls: [...new Set(state.urls.map(u => (u === oldURL ? url : u)))],
+    this.setState((state) => ({
+      urls: [...new Set(state.urls.map((u) => (u === oldURL ? url : u)))],
     }));
   };
 
@@ -48,7 +48,7 @@ class List extends Component {
     const { urls } = this.state;
     return (
       <Wrapper>
-        {urls.map(url => (
+        {urls.map((url) => (
           <VideoItem
             url={url}
             key={url}

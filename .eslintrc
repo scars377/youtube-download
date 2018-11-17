@@ -19,6 +19,9 @@
     "react/require-default-props": 0,
     "react/destructuring-assignment": 0,
     "jsx-a11y/img-has-alt": 0,
-    "object-curly-newline": 0
+    "object-curly-newline": 0,
+    "no-confusing-arrow": 0,
+    "arrow-parens": 0,
+    "max-len": [1, 80]
   }
 }

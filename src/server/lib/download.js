@@ -5,14 +5,14 @@ const path = require('path');
 
 const ITAG = 251;
 
-const getFileSize = filePath =>
+const getFileSize = (filePath) =>
   new Promise((resolve) => {
     fs.stat(filePath, (err, stat) => resolve(err ? 0 : stat.size));
   });
 
 const getVideoSize = (info) => {
   const fmts = info.player_response.streamingData.adaptiveFormats;
-  const { contentLength } = fmts.find(f => f.itag === ITAG);
+  const { contentLength } = fmts.find((f) => f.itag === ITAG);
   return parseInt(contentLength, 10);
 };
 

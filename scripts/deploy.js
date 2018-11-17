@@ -14,8 +14,8 @@ const xcopy = () =>
     ncp(
       path.resolve(__dirname, '../node_modules/electron/dist'),
       electronPath,
-      // err => (err ? reject(err) : resolve()),
-      () => resolve(),
+      { clobber: false },
+      (err) => (err ? reject(err) : resolve()),
     );
   });
 
@@ -25,11 +25,6 @@ const pack = () =>
       if (err || stats.hasErrors()) {
         reject(err);
       } else {
-        fs.writeFileSync(
-          path.resolve(__dirname, '../stats.json'),
-          JSON.stringify(stats.toJson()),
-          'utf8',
-        );
         resolve();
       }
     });
@@ -38,8 +33,8 @@ const pack = () =>
 const createPackageJSON = () =>
   new Promise((resolve, reject) => {
     const packagePath = path.resolve(mainConfig.output.path, 'package.json');
-    fs.writeFile(packagePath, '{"main":"main.js"}', 'utf8', err =>
-      (err ? reject(err) : resolve()),);
+    fs.writeFile(packagePath, '{"main":"main.js"}', 'utf8', (err) =>
+      err ? reject(err) : resolve());
   });
 
 const createAsar = () =>

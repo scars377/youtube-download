@@ -30,6 +30,7 @@ class App extends Component {
       case 82: // R
         return window.location.reload();
       default:
+        return null;
     }
   };
 
@@ -37,8 +38,8 @@ class App extends Component {
     const text = await navigator.clipboard.readText();
     const lines = text
       .split(/[\r\n]+/)
-      .map(s => s.trim())
-      .filter(s => s);
+      .map((s) => s.trim())
+      .filter((s) => s);
     this.list.current.addURLs(lines);
   };
 

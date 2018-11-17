@@ -26,7 +26,7 @@ export const VideoId = styled.span`
 
 const HEIGHT = 4;
 export const Thumbnail = styled.div.attrs({
-  style: props => ({
+  style: (props) => ({
     backgroundImage: `url('${props.src}')`,
   }),
 })`
@@ -57,7 +57,7 @@ const formatTime = (seconds) => {
 };
 
 export const Duration = styled.span.attrs({
-  children: props => formatTime(props.time),
+  children: (props) => formatTime(props.time),
 })`
   background: rgba(255, 255, 255, 0.2);
   padding: 0.1em 0.4em;
@@ -66,7 +66,7 @@ export const Duration = styled.span.attrs({
 `;
 
 export const VideoLink = styled.span.attrs({
-  onClick: props => () =>
+  onClick: (props) => () =>
     shell.openExternal(`https://www.youtube.com/watch?v=${props.videoId}`),
 })`
   cursor: pointer;
