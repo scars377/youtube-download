@@ -1,5 +1,6 @@
 /videos
 /info.json
+/electron
 /build
 
 node_modules

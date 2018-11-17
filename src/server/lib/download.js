@@ -20,7 +20,7 @@ module.exports = async (videoId, dir, onProgress) => {
   const info = await ytdl.getBasicInfo(videoId);
   const sizeTotal = getVideoSize(info);
   const fileName = filenamify(info.title, { replacement: '-' });
-  const filePath = path.resolve(dir, `${fileName}.mp4`);
+  const filePath = path.resolve(dir, `${fileName}.mp3`);
   const size = await getFileSize(filePath);
   if (size === sizeTotal) {
     onProgress(1);
