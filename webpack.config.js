@@ -4,7 +4,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV,
-  devtool: 'eval',
   devServer: {
     historyApiFallback: true,
     proxy: {

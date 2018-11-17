@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
+import { ipcRenderer } from 'electron';
 import VideoItem from './VideoItem';
-
-import local from '../local';
 
 const Wrapper = styled.div`
   flex: 1;
@@ -11,14 +10,30 @@ const Wrapper = styled.div`
 
 class List extends Component {
   state = {
-    urls: local.get('urls'),
+    urls: [],
   };
 
   itemRefs = {};
 
-  componentDidUpdate() {
-    local.set('urls', this.state.urls);
+  componentDidMount() {
+    this.getURLs();
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { urls } = this.state;
+    if (urls !== prevState.urls) {
+      ipcRenderer.send('setURLs', urls);
+    }
+  }
+
+  getURLs = () => {
+    ipcRenderer.once('getURLs', this.urlsGet);
+    ipcRenderer.send('getURLs');
+  };
+
+  urlsGet = (event, urls) => {
+    this.setState({ urls });
+  };
 
   addURLs = (urls) => {
     this.setState((state) => ({

@@ -9,15 +9,23 @@ const { app, BrowserWindow, ipcMain, shell } = electron;
 
 const dev = process.env.NODE_ENV === 'development';
 
-const videoPath = path.resolve(
-  app.getAppPath(),
-  dev ? '../../videos' : '../videos',
-);
+const videoPath = dev
+  ? path.resolve(__dirname, '../../videos')
+  : path.resolve(app.getAppPath(), '../videos');
+
+const urlsPath = dev
+  ? path.resolve(__dirname, '../../urls.json')
+  : path.resolve(app.getAppPath(), '../urls.json');
 
 try {
   fs.statSync(videoPath);
 } catch (err) {
   fs.mkdirSync(videoPath);
+}
+try {
+  fs.statSync(urlsPath);
+} catch (err) {
+  fs.writeFileSync(urlsPath, '[]', 'utf8');
 }
 
 app.on('ready', () => {
@@ -36,7 +44,8 @@ app.on('ready', () => {
   win.setMenu(null);
   if (dev) {
     win.webContents.openDevTools();
-    win.loadURL('http://localhost:8080');
+    // win.loadURL('http://localhost:8080');
+    win.loadFile(path.resolve(__dirname, '../../build/index.html'));
   } else {
     win.loadFile('index.html');
   }
@@ -44,6 +53,15 @@ app.on('ready', () => {
 
 ipcMain.on('openVideos', () => {
   shell.openItem(videoPath);
+});
+
+ipcMain.on('getURLs', (event) => {
+  const urls = JSON.parse(fs.readFileSync(urlsPath, 'utf8'));
+  event.sender.send('getURLs', urls);
+});
+
+ipcMain.on('setURLs', (event, urls) => {
+  fs.writeFile(urlsPath, JSON.stringify(urls), 'utf8', () => {});
 });
 
 ipcMain.on('getVideoId', async (event, url) => {
