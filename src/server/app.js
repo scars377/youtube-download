@@ -3,19 +3,20 @@ const ytdl = require('ytdl-core');
 const fs = require('fs');
 const path = require('path');
 
-const download = require('./lib/download');
+const Video = require('./Video');
 
 const { app, BrowserWindow, ipcMain, shell } = electron;
 
 const dev = process.env.NODE_ENV === 'development';
 
-const videoPath = dev
-  ? path.resolve(__dirname, '../../videos')
-  : path.resolve(app.getAppPath(), '../videos');
+const storagePath = dev
+  ? path.resolve(__dirname, '../../')
+  : path.resolve(app.getAppPath(), '../');
 
-const urlsPath = dev
-  ? path.resolve(__dirname, '../../urls.json')
-  : path.resolve(app.getAppPath(), '../urls.json');
+const videoPath = path.resolve(storagePath, 'videos');
+const urlsPath = path.resolve(storagePath, 'urls.json');
+
+Video.path = videoPath;
 
 try {
   fs.statSync(videoPath);
@@ -44,46 +45,65 @@ app.on('ready', () => {
   win.setMenu(null);
   if (dev) {
     win.webContents.openDevTools();
-    // win.loadURL('http://localhost:8080');
-    win.loadFile(path.resolve(__dirname, '../../build/index.html'));
+    win.loadURL('http://localhost:8080');
   } else {
     win.loadFile('index.html');
   }
-});
 
-ipcMain.on('openVideos', () => {
-  shell.openItem(videoPath);
-});
+  let list = [];
+  let saveQueue = false;
+  let saving = false;
 
-ipcMain.on('getURLs', (event) => {
-  const urls = JSON.parse(fs.readFileSync(urlsPath, 'utf8'));
-  event.sender.send('getURLs', urls);
-});
+  const saveList = () => {
+    if (saving) {
+      saveQueue = true;
+      return;
+    }
+    saving = true;
+    fs.writeFile(urlsPath, JSON.stringify(list, null, 2), 'utf8', () => {
+      saving = false;
+      if (saveQueue) {
+        saveQueue = false;
+        saveList();
+      }
+    });
+  };
 
-ipcMain.on('setURLs', (event, urls) => {
-  fs.writeFile(urlsPath, JSON.stringify(urls), 'utf8', () => {});
-});
+  const saveAndUpdateList = () => {
+    win.webContents.send('update-list', JSON.stringify(list));
+    saveList();
+  };
 
-ipcMain.on('getVideoId', async (event, url) => {
-  const id = ytdl.getVideoID(url);
-  if (typeof id === 'string') {
-    event.sender.send(`getVideoId ${url}`, id);
-  } else {
-    event.sender.send(`getVideoId ${url}`, null);
-  }
-});
-
-ipcMain.on('getInfo', async (event, url) => {
+  const content = fs.readFileSync(urlsPath, 'utf8');
   try {
-    const info = await ytdl.getBasicInfo(url);
-    event.sender.send(`getInfo ${url}`, info);
+    list = JSON.parse(content).map(
+      (video) => new Video(video, saveAndUpdateList),
+    );
   } catch (err) {
-    event.sender.send(`getInfo ${url}`, null);
+    // nothing
   }
-});
 
-ipcMain.on('download', async (event, videoId) => {
-  download(videoId, videoPath, (progress) => {
-    event.sender.send(`download ${videoId}`, progress);
+  ipcMain.on('open-videos', () => shell.openItem(videoPath));
+
+  ipcMain.on('update-list', saveAndUpdateList);
+
+  ipcMain.on('clear-completed', async () => {
+    list = list.filter((t) => t.status !== Video.Status.Completed);
+    saveAndUpdateList();
+  });
+
+  ipcMain.on('paste-clipboard', async (event, text) => {
+    const idSet = new Set(list.map((t) => t.id));
+
+    const newItems = text
+      .split(/[\r\n]+/)
+      .map((s) => ytdl.getVideoID(s))
+      .filter((s) => typeof s === 'string' && !idSet.has(s))
+      .map((id) => new Video({ id }, saveAndUpdateList));
+
+    if (newItems.length === 0) return;
+
+    list = [...newItems, ...list];
+    saveAndUpdateList();
   });
 });

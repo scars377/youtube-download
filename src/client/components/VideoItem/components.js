@@ -44,7 +44,7 @@ export const Info = styled.div`
 `;
 
 const formatTime = (seconds) => {
-  let t = seconds;
+  let t = parseInt(seconds, 10);
   const s = t % 60;
   t = parseInt(t / 60, 10);
   const m = t % 60;

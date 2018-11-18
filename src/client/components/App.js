@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import { hot } from 'react-hot-loader';
 import { ipcRenderer } from 'electron';
@@ -6,6 +6,7 @@ import { ipcRenderer } from 'electron';
 import GlobalStyle from './GlobalStyle';
 import { Menu, MenuItem } from './Menu';
 import List from './List';
+import VideoItem from './VideoItem';
 
 const Wrapper = styled.div`
   display: flex;
@@ -13,15 +14,23 @@ const Wrapper = styled.div`
 `;
 
 class App extends Component {
-  list = createRef();
+  state = { list: [] };
 
   componentDidMount() {
+    ipcRenderer.on('update-list', this.updateList);
+    ipcRenderer.send('update-list');
     window.addEventListener('keydown', this.onKeyDown);
   }
 
   componentWillUnmount() {
     window.removeEventListener('keydown', this.onKeyDown);
   }
+
+  updateList = (event, list) => {
+    this.setState({
+      list: JSON.parse(list),
+    });
+  };
 
   onKeyDown = (e) => {
     switch (e.keyCode) {
@@ -36,22 +45,19 @@ class App extends Component {
 
   loadClipboard = async () => {
     const text = await navigator.clipboard.readText();
-    const lines = text
-      .split(/[\r\n]+/)
-      .map((s) => s.trim())
-      .filter((s) => s);
-    this.list.current.addURLs(lines);
+    ipcRenderer.send('paste-clipboard', text);
   };
 
   openVideos = () => {
-    ipcRenderer.send('openVideos');
+    ipcRenderer.send('open-videos');
   };
 
   clearCompleted = () => {
-    this.list.current.clearCompleted();
+    ipcRenderer.send('clear-completed');
   };
 
   render() {
+    const { list } = this.state;
     return (
       <Wrapper>
         <GlobalStyle />
@@ -60,7 +66,11 @@ class App extends Component {
           <MenuItem onClick={this.openVideos}>Open Videos</MenuItem>
           <MenuItem onClick={this.clearCompleted}>Clear Completed</MenuItem>
         </Menu>
-        <List ref={this.list} />
+        <List>
+          {list.map((item) => (
+            <VideoItem item={item} key={item.id} />
+          ))}
+        </List>
       </Wrapper>
     );
   }

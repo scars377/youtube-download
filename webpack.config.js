@@ -12,6 +12,7 @@ module.exports = {
   },
 
   // context: path.resolve('./src'),
+  devtool: false,
   entry: path.resolve('./src/client/main.js'),
   output: {
     path: path.resolve('./build'),

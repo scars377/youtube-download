@@ -22,6 +22,11 @@ const xcopy = () =>
 const pack = () =>
   new Promise((resolve, reject) => {
     webpack([rendererConfig, mainConfig], (err, stats) => {
+      // fs.writeFileSync(
+      //   path.resolve(__dirname, '../stats.json'),
+      //   JSON.stringify(stats.toJson(), null, 2),
+      //   'utf8',
+      // );
       if (err || stats.hasErrors()) {
         reject(err);
       } else {
@@ -53,7 +58,7 @@ const deploy = async () => {
     await createPackageJSON();
     await createAsar();
   } catch (err) {
-    console.log(err);
+    console.log('error', err);
   }
 };
 deploy();

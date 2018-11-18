@@ -79,4 +79,4 @@ class List extends Component {
   }
 }
 
-export default List;
+export default Wrapper;
