@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 module.exports = {
   mode: 'production',
-  entry: path.resolve('./src/server/app.js'),
+  entry: path.resolve('./src/main/main.js'),
   output: {
     path: path.resolve('./build'),
     filename: 'main.js',

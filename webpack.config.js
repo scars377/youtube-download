@@ -4,16 +4,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV,
-  devServer: {
-    historyApiFallback: true,
-    proxy: {
-      '/api': 'http://localhost:8081',
-    },
-  },
-
-  // context: path.resolve('./src'),
   devtool: false,
-  entry: path.resolve('./src/client/main.js'),
+  entry: path.resolve('./src/renderer/main.js'),
   output: {
     path: path.resolve('./build'),
     filename: 'renderer.js',
@@ -24,14 +16,14 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     }),
     new HtmlWebpackPlugin({
-      template: path.resolve('./src/client/index.html'),
+      template: path.resolve('./src/renderer/index.html'),
     }),
   ],
   module: {
     rules: [
       {
         test: /\.js$/,
-        include: path.resolve('./src/client'),
+        include: path.resolve('./src/renderer'),
         loader: 'babel-loader',
       },
     ],

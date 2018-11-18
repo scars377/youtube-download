@@ -1,5 +1,9 @@
 # Electron Youtube Downloader
 
+## Requirement
+
+- Need ffmpeg installed and set path.
+
 ## To develop
 
 - Use vscode debug or `npm start`
@@ -11,6 +15,6 @@
 
 ## To use
 
-- After build a `eletron` directory will appear.
+- After `npm build`, `eletron` directory will appear.
 - Execute `electron/electron.exe` to run it.
 - Hotkey `E` to paste from clipboard.

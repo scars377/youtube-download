@@ -38,6 +38,6 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --inline --hot",
     "build": "cross-env NODE_ENV=production node ./scripts/deploy.js",
-    "start": "cross-env NODE_ENV=development electron ./src/server/app.js"
+    "start": "cross-env NODE_ENV=development electron ./src/main/main.js"
   }
 }
