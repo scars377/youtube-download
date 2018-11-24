@@ -18,3 +18,5 @@
 - After `npm build`, `eletron` directory will appear.
 - Execute `electron/electron.exe` to run it.
 - Hotkey `E` to paste from clipboard.
+
+![](screenshot.gif)
