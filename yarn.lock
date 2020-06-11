@@ -3147,10 +3147,15 @@ hpack.js@^2.1.6:
     readable-stream "^2.0.1"
     wbuf "^1.1.0"
 
-html-entities@^1.1.3, html-entities@^1.2.0:
+html-entities@^1.2.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/html-entities/-/html-entities-1.2.1.tgz#0df29351f0721163515dfb9e5543e5f6eed5162f"
   integrity sha1-DfKTUfByEWNRXfueVUPl9u7VFi8=
+
+html-entities@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/html-entities/-/html-entities-1.3.1.tgz#fb9a1a4b5b14c5daba82d3e34c6ae4fe701a0e44"
+  integrity sha512-rhE/4Z3hIhzHAUKbW8jVcCyuT5oJCXXqhN/6mXXVCpzTmvJnoH2HL/bt3EZ6p55jbFJBeAe1ZNpL5BugLujxNA==
 
 html-minifier@^3.2.3:
   version "3.5.21"
@@ -3902,12 +3907,12 @@ lru-cache@^4.1.1:
     pseudomap "^1.0.2"
     yallist "^2.1.2"
 
-m3u8stream@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/m3u8stream/-/m3u8stream-0.6.0.tgz#a78378d491b66a1207e206f368a9259b074a0c7b"
-  integrity sha512-h78ollIa7zeq0nzx1+wI/EH0soUpe9A7sC6zw/+/tuRwYdIXedOytvI69+6eP/FU4Ph0cT6kQsw73j5tKXIbgg==
+m3u8stream@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/m3u8stream/-/m3u8stream-0.7.1.tgz#74b01a67ca248ac7bbdc263a65d9d8d2c479a65c"
+  integrity sha512-z6ldnAdhbuWOL6LmMkwptSZGzj+qbRytMKLTbNicwF/bJMjf9U9lqD57RNQUFecvWadEkzy6PDjcNJFFgi19uQ==
   dependencies:
-    miniget "^1.4.0"
+    miniget "^1.6.1"
     sax "^1.2.4"
 
 make-dir@^1.0.0:
@@ -4064,10 +4069,10 @@ min-document@^2.19.0:
   dependencies:
     dom-walk "^0.1.0"
 
-miniget@^1.4.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/miniget/-/miniget-1.5.0.tgz#0b8e783e2c186830097eb2cc4ae606565514858a"
-  integrity sha512-RbRCj2m8Q/arS1nExuMB8qO4QavCpvfetQR+HVCeHGiFJGOryPn8u0z4WrIx9AAIDYFDVcFhQsRYvSY+UA5HJQ==
+miniget@^1.6.1, miniget@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/miniget/-/miniget-1.7.2.tgz#f95eff50b78d798dddee2460c4aa3c72db1aa23a"
+  integrity sha512-USPNNK2bnHLOplX8BZVMehUkyQizS/DFpBdoH0TS+fM+hQoLNg9tWg4MeY9wE8gfY0pbzmx5UBEODujt3Lz8AA==
 
 minimalistic-assert@^1.0.0, minimalistic-assert@^1.0.1:
   version "1.0.1"
@@ -6615,12 +6620,12 @@ yauzl@2.4.1:
   dependencies:
     fd-slicer "~1.0.1"
 
-ytdl-core@^0.28.0:
-  version "0.28.0"
-  resolved "https://registry.yarnpkg.com/ytdl-core/-/ytdl-core-0.28.0.tgz#5f1ed2c9071f13c9c55e6e7187941f4ed32a2efe"
-  integrity sha512-pk1nd0MPZLyMOENUOCFLBJ/m59XFqSWPzSY2UhdG7PHBwYtROAY5QRLoYEG0V21h7i3KUeHbnFq8czio5gPKYA==
+ytdl-core@^2.1.7:
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/ytdl-core/-/ytdl-core-2.1.7.tgz#d62c74161691a114de211145e645f30f607a5f96"
+  integrity sha512-ithllxxlt4zmJVTnYtT8/31QLv5MGlK3fSk29lx2S4eKc1BGh+ELKQEAkRJqWIf2P8TYBYrKwijx11xND4JcXw==
   dependencies:
-    html-entities "^1.1.3"
-    m3u8stream "^0.6.0"
-    miniget "^1.4.0"
+    html-entities "^1.3.1"
+    m3u8stream "^0.7.1"
+    miniget "^1.7.2"
     sax "^1.1.3"
