@@ -31,16 +31,9 @@ try {
 
 app.on('ready', () => {
   const win = new BrowserWindow({
-    width: dev ? 1440 : 800,
+    width: 800,
     height: 800,
-    ...(dev
-      ? {
-        x: 100 - 1680,
-        y: 40,
-      }
-      : {
-        center: true,
-      }),
+    center: true,
   });
   win.setMenu(null);
   if (dev) {
@@ -50,60 +43,67 @@ app.on('ready', () => {
     win.loadFile('index.html');
   }
 
-  let list = [];
+  let lists = {};
   let saveQueue = false;
   let saving = false;
 
-  const saveList = () => {
+  const saveLists = () => {
     if (saving) {
       saveQueue = true;
       return;
     }
     saving = true;
-    fs.writeFile(urlsPath, JSON.stringify(list, null, 2), 'utf8', () => {
+    fs.writeFile(urlsPath, JSON.stringify(lists, null, 2), 'utf8', () => {
       saving = false;
       if (saveQueue) {
         saveQueue = false;
-        saveList();
+        saveLists();
       }
     });
   };
 
-  const saveAndUpdateList = () => {
-    win.webContents.send('update-list', JSON.stringify(list));
-    saveList();
+  const saveAndUpdateLists = () => {
+    win.webContents.send('update-lists', JSON.stringify(lists));
+    saveLists();
   };
 
   const content = fs.readFileSync(urlsPath, 'utf8');
   try {
-    list = JSON.parse(content).map(
-      (video) => new Video(video, saveAndUpdateList),
-    );
+    const data = JSON.parse(content);
+    lists = {};
+    Object.keys(data).forEach((type) => {
+      lists[type] = data[type].map(
+        (video) => new Video(video, saveAndUpdateLists),
+      );
+    });
   } catch (err) {
     // nothing
   }
 
   ipcMain.on('open-videos', () => shell.openItem(videoPath));
 
-  ipcMain.on('update-list', saveAndUpdateList);
+  ipcMain.on('update-list', saveAndUpdateLists);
 
   ipcMain.on('clear-completed', async () => {
-    list = list.filter((t) => t.status !== Video.Status.Completed);
-    saveAndUpdateList();
+    Object.keys(lists).forEach((type) => {
+      lists[type] = lists[type].filter(
+        (t) => t.status !== Video.Status.Completed,
+      );
+    });
+    saveAndUpdateLists();
   });
 
-  ipcMain.on('paste-clipboard', async (event, text) => {
-    const idSet = new Set(list.map((t) => t.id));
+  ipcMain.on('paste-clipboard', async (event, [text, type]) => {
+    const hasID = (id) => (lists[type] || []).includes(id);
 
     const newItems = text
       .split(/[\r\n]+/)
       .map((s) => ytdl.getVideoID(s))
-      .filter((s) => typeof s === 'string' && !idSet.has(s))
-      .map((id) => new Video({ id }, saveAndUpdateList));
+      .filter((s) => typeof s === 'string' && !hasID(s))
+      .map((id) => new Video({ id, type }, saveAndUpdateLists));
 
     if (newItems.length === 0) return;
-
-    list = [...newItems, ...list];
-    saveAndUpdateList();
+    lists[type] = [...newItems, ...(lists[type] || [])];
+    saveAndUpdateLists();
   });
 });

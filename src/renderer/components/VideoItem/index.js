@@ -6,6 +6,7 @@ import {
   VideoId,
   Thumbnail,
   Info,
+  Type,
   Duration,
   VideoLink,
 } from './components';
@@ -14,6 +15,7 @@ const VideoItem = ({ item }) => {
   const {
     id,
     title = '',
+    type = '',
     thumbnail = '',
     lengthSeconds = '',
     status = '',
@@ -29,6 +31,7 @@ const VideoItem = ({ item }) => {
       <Thumbnail src={thumbnail} key={thumbnail} />
       <Info>
         <VideoId>{id}</VideoId>
+        <Type>{type}</Type>
         <br />
         <VideoLink videoId={id}>{title}</VideoLink>
         <br />
