@@ -1,5 +1,4 @@
-import { useEffect, useCallback } from 'react';
-import { ipcRenderer } from 'electron';
+import { useCallback, useEffect } from 'react';
 
 export default function useIPC(type) {
   const openVideos = useCallback(() => ipcRenderer.send('open-videos'), []);
@@ -15,7 +14,7 @@ export default function useIPC(type) {
   );
 
   const onKeyDown = useCallback(
-    e => {
+    (e) => {
       switch (e.keyCode) {
         case 69: // E
           return loadClipboard();

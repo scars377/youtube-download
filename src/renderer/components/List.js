@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-
-import { ipcRenderer } from 'electron';
 import VideoItem from './VideoItem';
 
 const Wrapper = styled.div`

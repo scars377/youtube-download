@@ -1,5 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
-import { ipcRenderer } from 'electron';
+import { useCallback, useEffect, useState } from 'react';
 
 export default function useLists() {
   const [lists, setLists] = useState([]);

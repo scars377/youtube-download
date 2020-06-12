@@ -1,4 +1,3 @@
-import { shell } from 'electron';
 import styled, { keyframes } from 'styled-components';
 
 const show = keyframes`
@@ -25,11 +24,11 @@ export const VideoId = styled.span`
 `;
 
 const HEIGHT = 4;
-export const Thumbnail = styled.div.attrs({
-  style: props => ({
+export const Thumbnail = styled.div.attrs((props) => ({
+  style: {
     backgroundImage: `url('${props.src}')`,
-  }),
-})`
+  },
+}))`
   flex: 0 0 ${HEIGHT * 1.78}em;
   height: ${HEIGHT}em;
   background: center center no-repeat;
@@ -43,7 +42,7 @@ export const Info = styled.div`
   line-height: 1.33em;
 `;
 
-const formatTime = seconds => {
+const formatTime = (seconds) => {
   let t = parseInt(seconds, 10);
   const s = t % 60;
   t = parseInt(t / 60, 10);
@@ -63,16 +62,16 @@ export const Type = styled.span`
   margin: 0 0 0 1em;
 `;
 
-export const Duration = styled(Type).attrs({
-  children: props => formatTime(props.time),
-})`
+export const Duration = styled(Type).attrs((props) => ({
+  children: formatTime(props.time),
+}))`
   margin: 0 1em 0 0;
 `;
 
-export const VideoLink = styled.span.attrs({
-  onClick: props => () =>
+export const VideoLink = styled.span.attrs((props) => ({
+  onClick: () =>
     shell.openExternal(`https://www.youtube.com/watch?v=${props.videoId}`),
-})`
+}))`
   cursor: pointer;
   &:hover {
     text-decoration: underline;

@@ -2,7 +2,6 @@ const electron = require('electron');
 const ytdl = require('ytdl-core');
 const fs = require('fs');
 const path = require('path');
-
 const Video = require('./Video');
 
 const { app, BrowserWindow, ipcMain, shell } = electron;
@@ -34,12 +33,17 @@ app.on('ready', () => {
     width: 800,
     height: 800,
     center: true,
+    webPreferences: {
+      // nodeIntegration: true,
+      preload: `${__dirname}/preload.js`,
+    },
   });
   win.setMenu(null);
   if (dev) {
     win.webContents.openDevTools();
     win.loadURL('http://localhost:8080');
   } else {
+    win.webContents.openDevTools();
     win.loadFile('index.html');
   }
 
@@ -80,7 +84,7 @@ app.on('ready', () => {
     // nothing
   }
 
-  ipcMain.on('open-videos', () => shell.openItem(videoPath));
+  ipcMain.on('open-videos', () => shell.openPath(videoPath));
 
   ipcMain.on('update-list', saveAndUpdateLists);
 
