@@ -39,7 +39,8 @@ const createPackageJSON = () =>
   new Promise((resolve, reject) => {
     const packagePath = path.resolve(mainConfig.output.path, 'package.json');
     fs.writeFile(packagePath, '{"main":"main.js"}', 'utf8', (err) =>
-      err ? reject(err) : resolve());
+      err ? reject(err) : resolve(),
+    );
   });
 
 const createAsar = () =>
@@ -51,12 +52,21 @@ const createAsar = () =>
     );
   });
 
+const preload = new Promise((resolve) => {
+  fs.copyFile(
+    path.resolve(mainConfig.output.path, 'preload.js'),
+    path.resolve(electronPath, 'resources/preload.js'),
+    () => resolve(),
+  );
+});
+
 const deploy = async () => {
   try {
     await xcopy();
     await pack();
     await createPackageJSON();
     await createAsar();
+    await preload();
   } catch (err) {
     console.log('error', err);
   }

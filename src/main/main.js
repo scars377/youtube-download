@@ -34,8 +34,10 @@ app.on('ready', () => {
     height: 800,
     center: true,
     webPreferences: {
-      // nodeIntegration: true,
-      preload: `${__dirname}/preload.js`,
+      nodeIntegration: true,
+      preload: dev
+        ? `${__dirname}/preload.js`
+        : path.resolve(app.getAppPath(), '../preload.js'),
     },
   });
   win.setMenu(null);
