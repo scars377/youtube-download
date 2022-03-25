@@ -5,7 +5,7 @@
   "author": "scars <scars377@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "electron": "9.0.3",
+    "electron": "13.6.6",
     "filenamify": "^4.1.0",
     "fluent-ffmpeg": "^2.1.2",
     "ytdl-core": "^2.1.7"
